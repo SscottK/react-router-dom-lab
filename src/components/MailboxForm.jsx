@@ -1,7 +1,11 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-const NewMailbox = ({ addMailbox}) => {
+const NewMailbox = ({ addMailbox}) => {    
+    const navigate = useNavigate()
     const [newMailbox, setNewMailbox] = useState({
+    
+        
         name: "",
         boxSize: ""        
     })
@@ -10,13 +14,16 @@ const NewMailbox = ({ addMailbox}) => {
         setNewMailbox({...newMailbox, [event.target.name]: event.target.value})
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e) => {        
         e.preventDefault()
-        addMailbox(newMailbox)
+        newMailbox.boxSize =  newMailbox.boxSize === ""  ? "small" : newMailbox.boxSize         
+        addMailbox(newMailbox)        
         setNewMailbox({
+            
             name: "",
             boxSize: ""
         })
+        navigate('/mailboxes')
     }
     return (
         <div>
@@ -28,10 +35,13 @@ const NewMailbox = ({ addMailbox}) => {
                 value={newMailbox.name}
                 onChange={handleChange}/>
                 <label htmlFor="boxSize">Mailbox Size</label>
-                <select name="boxSize" 
+                <select 
+                defaultValue="Small"               
+                name="boxSize" 
                 id="boxSize"
                 value={newMailbox.boxSize} 
                 onChange={handleChange}>
+                    <option value="" disabled selected>Select Your Box Size</option>
                     <option value="small">Small</option>
                     <option value="medium">Medium</option>
                     <option value="large">Large</option>
